@@ -87,9 +87,10 @@ app.put('/videos/:id', (req: RequestWithParamsAndBody<{id: string}, UpdateVideoM
         if (Array.isArray(req.body.availableResolutions)) {
             return req.body.availableResolutions.filter((res) => resolutions.includes(res))
         }
+        return []
     }
 
-    if(req.body.availableResolutions?.length !== checkRes()) {
+    if(req.body.availableResolutions?.length !== checkRes().length) {
         arrayOfErrors.push({ message: 'incorrect value', field: 'availableResolutions'})
     }
     if(typeof req.body.minAgeRestriction === 'number' && (req.body.minAgeRestriction > 18 || req.body.minAgeRestriction < 1)) {
@@ -126,11 +127,12 @@ app.post('/videos', (req: RequestWithBody<CreateVideoModel>, res: Response<Video
     const arrayOfErrors = []
     const checkRes = () => {
         if (Array.isArray(req.body.availableResolutions)) {
-          return req.body.availableResolutions.filter((res) => resolutions.includes(res))
+          return  req.body.availableResolutions.filter((res) => resolutions.includes(res))
         }
+        return []
     }
 
-    if(req.body.availableResolutions?.length !== checkRes()) {
+    if(req.body.availableResolutions?.length !== checkRes().length) {
         arrayOfErrors.push({ message: 'incorrect value', field: 'availableResolutions'})
     }
     if(typeof req.body.canBeDownloaded ==='string') {
