@@ -89,25 +89,25 @@ app.put('/videos/:id', (req: RequestWithParamsAndBody<{id: string}, UpdateVideoM
         }
         return []
     }
-    if(typeof req.body.canBeDownloaded !=='boolean') {
+    if(req.body.canBeDownloaded && typeof req.body.canBeDownloaded !=='boolean') {
         arrayOfErrors.push({ message: 'can not be string', field: 'canBeDownloaded'})
     }
     if(req.body.publicationDate && typeof req.body.publicationDate !=='string') {
         arrayOfErrors.push({ message: 'can not be string', field: 'publicationDate'})
     }
-    if(req.body.availableResolutions?.length !== checkRes().length) {
+    if(req.body.availableResolutions && req.body.availableResolutions?.length !== checkRes().length) {
         arrayOfErrors.push({ message: 'incorrect value', field: 'availableResolutions'})
     }
-    if(typeof req.body.minAgeRestriction === 'number' && (req.body.minAgeRestriction > 18 || req.body.minAgeRestriction < 1)) {
+    if(req.body.minAgeRestriction && typeof req.body.minAgeRestriction === 'number' && (req.body.minAgeRestriction > 18 || req.body.minAgeRestriction < 1)) {
         arrayOfErrors.push({ message: 'should be between 1 and 18', field: 'minAgeRestriction'})
     }
-    if(typeof req.body.title === "object") {
+    if(req.body.title && typeof req.body.title === "object") {
         arrayOfErrors.push({ message: 'incorrect type', field: 'title'})
     }
-    if(typeof req.body.title === 'string' && req.body.title.length > 40) {
+    if(req.body.title && typeof req.body.title === 'string' && req.body.title.length > 40) {
         arrayOfErrors.push({ message: 'max length for title 40', field: 'title'})
     }
-    if(req.body.author.length > 20) {
+    if(req.body.author && req.body.author?.length > 20) {
         arrayOfErrors.push({ message: 'max length for author 20', field: 'author'})
     }
     if(arrayOfErrors.length) {
@@ -137,26 +137,26 @@ app.post('/videos', (req: RequestWithBody<CreateVideoModel>, res: Response<Video
         return []
     }
 
-    if(req.body.availableResolutions?.length !== checkRes().length) {
+    if(req.body.availableResolutions && req.body.availableResolutions?.length !== checkRes().length) {
         arrayOfErrors.push({ message: 'incorrect value', field: 'availableResolutions'})
     }
-    if(typeof req.body.canBeDownloaded !=='boolean') {
+    if(req.body.canBeDownloaded && typeof req.body.canBeDownloaded !=='boolean') {
         arrayOfErrors.push({ message: 'can not be string', field: 'canBeDownloaded'})
     }
     if(req.body.publicationDate && typeof req.body.publicationDate !=='string') {
         arrayOfErrors.push({ message: 'can not be string', field: 'publicationDate'})
     }
-    if(typeof req.body.minAgeRestriction === 'number' && (req.body.minAgeRestriction > 18 || req.body.minAgeRestriction < 1)) {
+    if(req.body.minAgeRestriction && typeof req.body.minAgeRestriction === 'number' && (req.body.minAgeRestriction > 18 || req.body.minAgeRestriction < 1)) {
         arrayOfErrors.push({ message: 'should be between 1 and 18', field: 'minAgeRestriction'})
     }
-    if(typeof req.body.title === "object") {
+    if(req.body.title && typeof req.body.title === "object") {
         arrayOfErrors.push({ message: 'incorrect type', field: 'title'})
     }
 
     if(typeof req.body.title === 'string' && req.body.title?.length > 40) {
         arrayOfErrors.push({ message: 'max length for title 40', field: 'title'})
     }
-    if(req.body.author?.length > 20) {
+    if(req.body.author && req.body.author?.length > 20) {
         arrayOfErrors.push({ message: 'max length for author 20', field: 'author'})
     }
     if(req.body.availableResolutions && !req.body.availableResolutions.length) {
