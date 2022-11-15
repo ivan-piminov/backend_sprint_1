@@ -83,6 +83,15 @@ app.delete('/testing/all-data', (req: Request, res: Response) => {
 })
 app.put('/videos/:id', (req: RequestWithParamsAndBody<{id: string}, UpdateVideoModel>, res: Response<VideoType | ErrorsMessagesType>) => {
     const arrayOfErrors = []
+    const checkRes = () => {
+        if (Array.isArray(req.body.availableResolutions)) {
+            return req.body.availableResolutions.filter((res) => resolutions.includes(res))
+        }
+    }
+
+    if(req.body.availableResolutions?.length !== checkRes()) {
+        arrayOfErrors.push({ message: 'incorrect value', field: 'availableResolutions'})
+    }
     if(typeof req.body.minAgeRestriction === 'number' && (req.body.minAgeRestriction > 18 || req.body.minAgeRestriction < 1)) {
         arrayOfErrors.push({ message: 'should be between 1 and 18', field: 'minAgeRestriction'})
     }
@@ -115,26 +124,15 @@ app.put('/videos/:id', (req: RequestWithParamsAndBody<{id: string}, UpdateVideoM
 
 app.post('/videos', (req: RequestWithBody<CreateVideoModel>, res: Response<VideoType | ErrorsMessagesType>) => {
     const arrayOfErrors = []
-    let isErrorExist: boolean
-    const checkResolutions = () => {
-        if(req.body.availableResolutions) {
-            for (let i = 0; i == req.body.availableResolutions?.length; i++) {
-                resolutions.find(res => {
-                    if(Array.isArray(req.body.availableResolutions)) {
-                        if(res !== req.body.availableResolutions[i])
-                        isErrorExist = true
-                    }
-                } )
-            }
+    const checkRes = () => {
+        if (Array.isArray(req.body.availableResolutions)) {
+          return req.body.availableResolutions.filter((res) => resolutions.includes(res))
         }
-        return isErrorExist
-        // return isErrorExist
-        //
-        // return resolutions.filter(function(res) {
-        //     return req.body.availableResolutions && req.body.availableResolutions.indexOf(res) !== -1;
-        // });
     }
-    checkResolutions()
+
+    if(req.body.availableResolutions?.length !== checkRes()) {
+        arrayOfErrors.push({ message: 'incorrect value', field: 'availableResolutions'})
+    }
     if(typeof req.body.canBeDownloaded ==='string') {
         arrayOfErrors.push({ message: 'can not be string', field: 'canBeDownloaded'})
     }
@@ -144,9 +142,6 @@ app.post('/videos', (req: RequestWithBody<CreateVideoModel>, res: Response<Video
     }
     if(typeof req.body.title === "object") {
         arrayOfErrors.push({ message: 'incorrect type', field: 'title'})
-    }
-    if(req.body.availableResolutions) {
-        arrayOfErrors.push({ message: 'incorrect value', field: 'availableResolutions'})
     }
 
     if(typeof req.body.title === 'string' && req.body.title?.length > 40) {

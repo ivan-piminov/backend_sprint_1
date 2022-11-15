@@ -1,7 +1,7 @@
 
 export type CreateVideoModel = {
     publicationDate: string,
-    title: string | null,
+    title: string,
     author: string,
     availableResolutions?: string[],
     canBeDownloaded?: boolean,
