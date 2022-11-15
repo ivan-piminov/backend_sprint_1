@@ -89,8 +89,11 @@ app.put('/videos/:id', (req: RequestWithParamsAndBody<{id: string}, UpdateVideoM
         }
         return []
     }
-    if(typeof req.body.canBeDownloaded ==='string') {
+    if(typeof req.body.canBeDownloaded !=='string') {
         arrayOfErrors.push({ message: 'can not be string', field: 'canBeDownloaded'})
+    }
+    if(typeof req.body.canBeDownloaded !=='string') {
+        arrayOfErrors.push({ message: 'can not be string', field: 'publicationDate'})
     }
     if(req.body.availableResolutions?.length !== checkRes().length) {
         arrayOfErrors.push({ message: 'incorrect value', field: 'availableResolutions'})
@@ -140,7 +143,9 @@ app.post('/videos', (req: RequestWithBody<CreateVideoModel>, res: Response<Video
     if(typeof req.body.canBeDownloaded ==='string') {
         arrayOfErrors.push({ message: 'can not be string', field: 'canBeDownloaded'})
     }
-
+    if(typeof req.body.canBeDownloaded !=='string') {
+        arrayOfErrors.push({ message: 'can not be string', field: 'publicationDate'})
+    }
     if(typeof req.body.minAgeRestriction === 'number' && (req.body.minAgeRestriction > 18 || req.body.minAgeRestriction < 1)) {
         arrayOfErrors.push({ message: 'should be between 1 and 18', field: 'minAgeRestriction'})
     }
