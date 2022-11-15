@@ -101,7 +101,7 @@ app.put('/videos/:id', (req: RequestWithParamsAndBody<{id: string}, UpdateVideoM
     if(req.body.minAgeRestriction && typeof req.body.minAgeRestriction === 'number' && (req.body.minAgeRestriction > 18 || req.body.minAgeRestriction < 1)) {
         arrayOfErrors.push({ message: 'should be between 1 and 18', field: 'minAgeRestriction'})
     }
-    if(req.body.title && typeof req.body.title === "object") {
+    if(req.body.title && typeof req.body.title !== "object") {
         arrayOfErrors.push({ message: 'incorrect type', field: 'title'})
     }
     if(req.body.title && typeof req.body.title === 'string' && req.body.title.length > 40) {
