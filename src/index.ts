@@ -89,7 +89,9 @@ app.put('/videos/:id', (req: RequestWithParamsAndBody<{id: string}, UpdateVideoM
         }
         return []
     }
-
+    if(typeof req.body.canBeDownloaded ==='string') {
+        arrayOfErrors.push({ message: 'can not be string', field: 'canBeDownloaded'})
+    }
     if(req.body.availableResolutions?.length !== checkRes().length) {
         arrayOfErrors.push({ message: 'incorrect value', field: 'availableResolutions'})
     }
