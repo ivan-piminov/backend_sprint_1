@@ -13,7 +13,7 @@ import {
 } from "./types";
 
 const app = express()
-const port = process.env.PORT || 5000
+const port = process.env.PORT || 3000
 
 let videos: VideoType[] = [
     {
@@ -116,25 +116,28 @@ app.put('/videos/:id', (req: RequestWithParamsAndBody<{id: string}, UpdateVideoM
 app.post('/videos', (req: RequestWithBody<CreateVideoModel>, res: Response<VideoType | ErrorsMessagesType>) => {
     const arrayOfErrors = []
     let isErrorExist: boolean
-    // const checkResolutions = () => {
-    //     if(req.body.availableResolutions) {
-    //         for (let i = 0; i == req.body.availableResolutions?.length; i++) {
-    //             resolutions.find(res => {
-    //                 if(Array.isArray(req.body.availableResolutions)) {
-    //                     if(res !== req.body.availableResolutions[i])
-    //                     isErrorExist = true
-    //                 }
-    //             } )
-    //         }
-    //     }
-    //     return isErrorExist
-    //     // return isErrorExist
-    //     //
-    //     // return resolutions.filter(function(res) {
-    //     //     return req.body.availableResolutions && req.body.availableResolutions.indexOf(res) !== -1;
-    //     // });
-    // }
-    // checkResolutions()
+    const checkResolutions = () => {
+        if(req.body.availableResolutions) {
+            for (let i = 0; i == req.body.availableResolutions?.length; i++) {
+                resolutions.find(res => {
+                    if(Array.isArray(req.body.availableResolutions)) {
+                        if(res !== req.body.availableResolutions[i])
+                        isErrorExist = true
+                    }
+                } )
+            }
+        }
+        return isErrorExist
+        // return isErrorExist
+        //
+        // return resolutions.filter(function(res) {
+        //     return req.body.availableResolutions && req.body.availableResolutions.indexOf(res) !== -1;
+        // });
+    }
+    checkResolutions()
+    if(typeof req.body.canBeDownloaded ==='string') {
+        arrayOfErrors.push({ message: 'can not be string', field: 'canBeDownloaded'})
+    }
 
     if(typeof req.body.minAgeRestriction === 'number' && (req.body.minAgeRestriction > 18 || req.body.minAgeRestriction < 1)) {
         arrayOfErrors.push({ message: 'should be between 1 and 18', field: 'minAgeRestriction'})
@@ -142,9 +145,9 @@ app.post('/videos', (req: RequestWithBody<CreateVideoModel>, res: Response<Video
     if(typeof req.body.title === "object") {
         arrayOfErrors.push({ message: 'incorrect type', field: 'title'})
     }
-    // if(req.body.availableResolutions) {
-    //     arrayOfErrors.push({ message: 'incorrect value', field: 'availableResolutions'})
-    // }
+    if(req.body.availableResolutions) {
+        arrayOfErrors.push({ message: 'incorrect value', field: 'availableResolutions'})
+    }
 
     if(typeof req.body.title === 'string' && req.body.title?.length > 40) {
         arrayOfErrors.push({ message: 'max length for title 40', field: 'title'})
