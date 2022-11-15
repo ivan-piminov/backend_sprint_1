@@ -89,7 +89,7 @@ app.put('/videos/:id', (req: RequestWithParamsAndBody<{id: string}, UpdateVideoM
         }
         return []
     }
-    if(typeof req.body.canBeDownloaded !=='string') {
+    if(typeof req.body.canBeDownloaded !=='boolean') {
         arrayOfErrors.push({ message: 'can not be string', field: 'canBeDownloaded'})
     }
     if(req.body.publicationDate && typeof req.body.publicationDate !=='string') {
@@ -140,7 +140,7 @@ app.post('/videos', (req: RequestWithBody<CreateVideoModel>, res: Response<Video
     if(req.body.availableResolutions?.length !== checkRes().length) {
         arrayOfErrors.push({ message: 'incorrect value', field: 'availableResolutions'})
     }
-    if(typeof req.body.canBeDownloaded ==='string') {
+    if(typeof req.body.canBeDownloaded !=='boolean') {
         arrayOfErrors.push({ message: 'can not be string', field: 'canBeDownloaded'})
     }
     if(req.body.publicationDate && typeof req.body.publicationDate !=='string') {
